@@ -1,5 +1,5 @@
 {
-  "name": "deluge-manager",
+  "name": "deluge-autoremove",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
