@@ -16,7 +16,7 @@ export class AutoRemove {
                     config.autoremove[torrent.label] :
                     config.autoremove[torrent.tracker_host] ?
                         config.autoremove[torrent.tracker_host] :
-                        config.autoremove.all;
+                        config.autoremove.all ? config.autoremove.all : {};
     }
 
     private static applyFilters(removeRules: any, torrent: Torrent) {
@@ -38,6 +38,19 @@ export class AutoRemove {
             || config.autoremove.exemptions[torrent.tracker_host]);
     }
 
+    private static getShouldRemove(appliedFilterResults, removeRules) {
+        if (appliedFilterResults.length === 0) {
+            return false;
+        }
+
+        if (!removeRules.conjunction) {
+            removeRules.conjunction = "or";
+        }
+
+        return appliedFilterResults.length === 1 ?
+            appliedFilterResults[0] : conjunctions[removeRules.conjunction](appliedFilterResults);
+    }
+
     private client: Deluge;
     private readonly test_mode: boolean;
 
@@ -55,8 +68,7 @@ export class AutoRemove {
             if (AutoRemove.isNotFinished(torrent) || AutoRemove.isExempted(torrent)) { continue; }
             const removeRules = AutoRemove.getRemoveRules(torrent);
             const appliedFilterResults = AutoRemove.applyFilters(removeRules, torrent);
-            const shouldRemove = appliedFilterResults.length === 1 ?
-                appliedFilterResults[0] : conjunctions[removeRules.conjunction](appliedFilterResults);
+            const shouldRemove = AutoRemove.getShouldRemove(appliedFilterResults, removeRules);
             if (this.removeTorrent(shouldRemove, torrent, key, removeRules)) {
                 removedTorrents.push(torrent);
             }
