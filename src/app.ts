@@ -23,7 +23,7 @@ async function autoremove() {
     console.log("Checking torrents to see which can be removed...");
     const res = await client.listTorrents(["seeding_time"]);
     const currentTorrents: {[key: string]: Torrent} = res.result.torrents;
-    console.log(`Found ${currentTorrents.length} torrents in total!`);
+    console.info(`Found ${Object.values(currentTorrents).length} torrents in total!`);
     const removedTorrents = autoremover.check(currentTorrents);
     console.log(`Removed ${removedTorrents.length} torrents!`);
     return removedTorrents;
