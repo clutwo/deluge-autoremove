@@ -4,6 +4,7 @@ import {client} from "./client";
 import {config} from "./config";
 import {conjunctions} from "./conjunctions";
 import {filters} from "./filters";
+import {log} from "./log";
 
 export class AutoRemove {
 
@@ -64,7 +65,6 @@ export class AutoRemove {
         const removedTorrents = [];
 
         for (const[key, torrent] of Object.entries(torrents)) {
-            // console.log(torrent);
             if (AutoRemove.isNotFinished(torrent) || AutoRemove.isExempted(torrent)) { continue; }
             const removeRules = AutoRemove.getRemoveRules(torrent);
             const appliedFilterResults = AutoRemove.applyFilters(removeRules, torrent);
@@ -81,10 +81,10 @@ export class AutoRemove {
         let torrentRemoved = false;
         if (shouldRemove) {
             if (this.test_mode) {
-                console.log(`Would remove: ${torrent.name} with ratio ${torrent.ratio} and seeding time of ${torrent.seeding_time} days"`);
+                log(`Would remove: ${torrent.name} with ratio ${torrent.ratio} and seeding time of ${torrent.seeding_time} days"`);
             } else {
                 client.removeTorrent(key, removeRules.remove_data).then((result) => {
-                    console.log(`Torrent ${torrent.name} with ration of ${torrent.ratio} and seeding time of ${torrent.seeding_time} days removed successfully!`);
+                    log(`Torrent ${torrent.name} with ration of ${torrent.ratio} and seeding time of ${torrent.seeding_time} days removed successfully!`);
                 });
             }
             torrentRemoved = true;
