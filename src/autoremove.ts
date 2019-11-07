@@ -55,7 +55,7 @@ export class AutoRemove {
     private client: Deluge;
     private readonly test_mode: boolean;
 
-    constructor(client: Deluge, test_mode: boolean) {
+    constructor(client: Deluge, test_mode: boolean = false) {
         this.client = client;
         this.test_mode = test_mode;
     }
@@ -81,10 +81,10 @@ export class AutoRemove {
         let torrentRemoved = false;
         if (shouldRemove) {
             if (this.test_mode) {
-                log(`Would remove: ${torrent.name} with ratio ${torrent.ratio} and seeding time of ${torrent.seeding_time} days"`);
+                log(`Would remove: ${torrent.name} with ratio ${torrent.ratio.toFixed(3)} and seeding time of ${+torrent.seeding_time.toFixed(2)} days"`);
             } else {
                 client.removeTorrent(key, removeRules.remove_data).then((result) => {
-                    log(`Torrent ${torrent.name} with ration of ${torrent.ratio} and seeding time of ${torrent.seeding_time} days removed successfully!`);
+                    log(`Torrent ${torrent.name} with ratio of ${torrent.ratio.toFixed(3)} and seeding time of ${+torrent.seeding_time.toFixed(2)} days removed successfully!`);
                 });
             }
             torrentRemoved = true;
