@@ -22,12 +22,14 @@ function start() {
 
 async function autoremove() {
     log("Checking torrents to see which can be removed...");
-    const res = await client.listTorrents(["seeding_time"]);
-    const currentTorrents: {[key: string]: Torrent} = res.result.torrents;
-    log(`Found ${Object.values(currentTorrents).length} torrents in total!`);
-    const removedTorrents = autoremover.check(currentTorrents);
-    log(`Removed ${removedTorrents.length} torrents!`);
-    return removedTorrents;
+    const res = await client.listTorrents(["seeding_time"]).catch((err) => console.log(`Error retrieving torrents from client: ${err}`));
+    if (res) {
+        const currentTorrents: {[key: string]: Torrent} = res.result.torrents;
+        log(`Found ${Object.values(currentTorrents).length} torrents in total!`);
+        const removedTorrents = autoremover.check(currentTorrents);
+        log(`Removed ${removedTorrents.length} torrents!`);
+        return removedTorrents;
+    }
 }
 
 start();
