@@ -66,7 +66,10 @@ export class AutoRemove {
     }
 
     public check(torrents: {[key: string]: Torrent}) {
-        if (!config.autoremove) { return; }
+        if (!config.autoremove) {
+            log("No autoremove options found! Returning...");
+            return;
+        }
         const removedTorrents = [];
 
         for (const[key, torrent] of Object.entries(torrents)) {
