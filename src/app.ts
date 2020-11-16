@@ -12,7 +12,6 @@ const autoremover = new AutoRemove(client, TEST_MODE);
 function start() {
     if (config.autoremove && config.autoremove.enabled) {
         log(`Starting autoremove module...`);
-        log(JSON.stringify(config, null, 2));
         // tslint:disable-next-line:max-line-length
         const interval = config.autoremove.check_interval ? config.autoremove.check_interval * 60 * 1000 : DEFAULT_CHECK_INTERVAL * 60 * 1000;
         autoremove().then(() => {
