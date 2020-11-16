@@ -13,10 +13,11 @@ export class AutoRemove {
      * @param torrent
      */
     private static getRemoveRules(torrent) {
+        const trackerHostWithoutDomain = torrent.tracker_host.split(".")[0];
         return config.autoremove[torrent.label] ?
                     config.autoremove[torrent.label] :
-                    config.autoremove[torrent.tracker_host] ?
-                        config.autoremove[torrent.tracker_host] :
+                    config.autoremove[trackerHostWithoutDomain] ?
+                        config.autoremove[trackerHostWithoutDomain] :
                         config.autoremove.all ? config.autoremove.all : {};
     }
 
