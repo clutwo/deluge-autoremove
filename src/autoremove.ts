@@ -14,6 +14,10 @@ export class AutoRemove {
      */
     private static getRemoveRules(torrent) {
         const trackerHostWithoutDomain = torrent.tracker_host.split(".")[0];
+        log(`Torrent trackerhost: ${torrent.tracker_host}`);
+        log(`Torrent trackerhost without domain: ${trackerHostWithoutDomain}`);
+        log(`Config has rules: ${config.autoremove.hasOwnProperty(trackerHostWithoutDomain)}`);
+
         return config.autoremove[torrent.label] ?
                     config.autoremove[torrent.label] :
                     config.autoremove[trackerHostWithoutDomain] ?
